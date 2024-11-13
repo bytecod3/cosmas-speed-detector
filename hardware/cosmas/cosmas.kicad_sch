@@ -1,0 +1,218 @@
+(kicad_sch
+	(version 20231120)
+	(generator "eeschema")
+	(generator_version "8.0")
+	(uuid "bb87b3c4-a185-4d09-b637-e12eb905a163")
+	(paper "A4")
+	(title_block
+		(company "Spectrol Systems")
+	)
+	(lib_symbols)
+	(text "Parent Sheet"
+		(exclude_from_sim no)
+		(at 150.114 49.53 0)
+		(effects
+			(font
+				(size 7.62 7.62)
+				(thickness 1.524)
+				(bold yes)
+			)
+		)
+		(uuid "0636b50b-6359-4f66-a3e7-5ed9dd962d40")
+	)
+	(sheet
+		(at 168.91 62.23)
+		(size 46.99 20.32)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "352710a6-4149-4b34-9aff-6e0962dc543a")
+		(property "Sheetname" "CPU"
+			(at 168.91 61.5184 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "cpu.kicad_sch"
+			(at 168.91 83.1346 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "cosmas"
+				(path "/bb87b3c4-a185-4d09-b637-e12eb905a163"
+					(page "4")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 54.61 99.06)
+		(size 38.1 20.32)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "6a26fb06-24b3-4562-a35b-864dc5cf9817")
+		(property "Sheetname" "GSM-LORA-GPS"
+			(at 54.61 98.3484 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "gsm-gps-lora.kicad_sch"
+			(at 54.61 119.9646 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "cosmas"
+				(path "/bb87b3c4-a185-4d09-b637-e12eb905a163"
+					(page "5")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 54.61 62.23)
+		(size 39.37 19.05)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "754711c9-36ba-4afa-bf8e-e5deef39e0a7")
+		(property "Sheetname" "power-supply"
+			(at 54.61 61.5184 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "power-supply.kicad_sch"
+			(at 54.61 81.8646 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "cosmas"
+				(path "/bb87b3c4-a185-4d09-b637-e12eb905a163"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 110.49 100.33)
+		(size 38.1 20.32)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "7a0208f7-8bed-4b73-b815-407447bdecd6")
+		(property "Sheetname" "Display"
+			(at 110.49 99.6184 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "display.kicad_sch"
+			(at 110.49 121.2346 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "cosmas"
+				(path "/bb87b3c4-a185-4d09-b637-e12eb905a163"
+					(page "6")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 113.03 62.23)
+		(size 38.1 19.05)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "f2285c6b-634a-4a35-87b5-faaf19acbf0e")
+		(property "Sheetname" "motors"
+			(at 113.03 61.5184 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "motors.kicad_sch"
+			(at 113.03 81.8646 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "cosmas"
+				(path "/bb87b3c4-a185-4d09-b637-e12eb905a163"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+)
