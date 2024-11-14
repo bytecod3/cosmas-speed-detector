@@ -8,4 +8,14 @@
 
 #define BAUD        115200
 
+
+/* LORA pins */
+#define MOSI    23
+#define MISO    19
+#define SCK     18
+#define NSS     4
+#define RESET   2
+#define DIO0    32
+
+
 #endif

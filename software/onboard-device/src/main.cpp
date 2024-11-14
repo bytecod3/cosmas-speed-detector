@@ -28,10 +28,17 @@ void initLCD() {
     lcd.print("Welcome.");
 }
 
+/**
+ * @brief init LORA 
+ */
+void initLORA() {
+
+}
+
 void setup() {
     initSerial();
     initLCD();
-
+    initLORA();
 }
 
 void loop() {

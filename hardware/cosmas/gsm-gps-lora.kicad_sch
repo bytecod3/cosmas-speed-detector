@@ -1115,7 +1115,7 @@
 	)
 	(wire
 		(pts
-			(xy 146.05 95.25) (xy 154.94 95.25)
+			(xy 151.13 95.25) (xy 154.94 95.25)
 		)
 		(stroke
 			(width 0)
@@ -1125,7 +1125,7 @@
 	)
 	(wire
 		(pts
-			(xy 146.05 92.71) (xy 154.94 92.71)
+			(xy 151.13 92.71) (xy 154.94 92.71)
 		)
 		(stroke
 			(width 0)
@@ -1155,7 +1155,7 @@
 	)
 	(wire
 		(pts
-			(xy 146.05 100.33) (xy 154.94 100.33)
+			(xy 151.13 100.33) (xy 154.94 100.33)
 		)
 		(stroke
 			(width 0)
@@ -1195,7 +1195,7 @@
 	)
 	(wire
 		(pts
-			(xy 146.05 97.79) (xy 154.94 97.79)
+			(xy 151.13 97.79) (xy 154.94 97.79)
 		)
 		(stroke
 			(width 0)
@@ -1265,7 +1265,7 @@
 	)
 	(wire
 		(pts
-			(xy 63.5 127) (xy 71.12 127)
+			(xy 69.85 127) (xy 71.12 127)
 		)
 		(stroke
 			(width 0)
@@ -1355,114 +1355,6 @@
 		)
 		(uuid "ff8d2e31-ad94-4229-a2fd-d2fff83aa0c4")
 	)
-	(label "DIO0"
-		(at 107.95 91.44 180)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-				(bold yes)
-			)
-			(justify right bottom)
-		)
-		(uuid "064e1760-3302-4bd6-a16f-de03886ad4c1")
-	)
-	(label "GSM_TX"
-		(at 146.05 100.33 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-				(bold yes)
-			)
-			(justify left bottom)
-		)
-		(uuid "2f4e905d-cff6-4c6c-9faa-109a0e332b6d")
-	)
-	(label "BUZZER"
-		(at 63.5 127 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-				(bold yes)
-			)
-			(justify left bottom)
-		)
-		(uuid "2fe48e68-1d92-4c2b-ae53-e2bc33a3c5df")
-	)
-	(label "GPS_TX"
-		(at 213.36 93.98 180)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-				(bold yes)
-			)
-			(justify right bottom)
-		)
-		(uuid "36113e11-3f55-4c19-88ef-33aba309d417")
-	)
-	(label "GSM_RST"
-		(at 146.05 95.25 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-				(bold yes)
-			)
-			(justify left bottom)
-		)
-		(uuid "39ce6840-dfcc-47aa-b784-d43a1b33042d")
-	)
-	(label "GPS_RX"
-		(at 213.36 96.52 180)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-				(bold yes)
-			)
-			(justify right bottom)
-		)
-		(uuid "40c2a43f-efde-4994-8269-b10b5fa0e7f4")
-	)
-	(label "RST"
-		(at 76.2 99.06 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-				(bold yes)
-			)
-			(justify left bottom)
-		)
-		(uuid "41c1e86e-dce6-4715-a7ad-cf3d12c2712a")
-	)
-	(label "GSM_RX"
-		(at 146.05 97.79 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-				(bold yes)
-			)
-			(justify left bottom)
-		)
-		(uuid "762998c2-1997-4886-bda4-56f282e25f86")
-	)
-	(label "MISO"
-		(at 76.2 88.9 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-				(bold yes)
-			)
-			(justify left bottom)
-		)
-		(uuid "81beca32-69dc-4775-8199-d38d590123dc")
-	)
 	(label "5V"
 		(at 218.44 99.06 180)
 		(fields_autoplaced yes)
@@ -1474,64 +1366,313 @@
 		)
 		(uuid "84ee30cf-4fb6-4b79-b930-b0524ec2cbfc")
 	)
-	(label "MOSI"
-		(at 76.2 91.44 0)
+	(global_label "GSM_TX"
+		(shape input)
+		(at 151.13 100.33 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
-				(bold yes)
 			)
-			(justify left bottom)
+			(justify right)
 		)
-		(uuid "955c52e8-e4ff-4f9e-ba23-fa07d7710b06")
+		(uuid "2e322281-2b76-4a4a-a49c-fcafc672eb92")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 141.0692 100.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
 	)
-	(label "CS"
-		(at 76.2 96.52 0)
+	(global_label "BUZZER"
+		(shape input)
+		(at 69.85 127 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
-				(bold yes)
 			)
-			(justify left bottom)
+			(justify right)
 		)
-		(uuid "a4a8924b-6a13-4460-a981-df983b703fea")
+		(uuid "3658cdf7-9cbf-4b0f-a1ea-d484410639a5")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 59.4263 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
 	)
-	(label "SCK"
-		(at 76.2 93.98 0)
+	(global_label "MISO"
+		(shape input)
+		(at 76.2 88.9 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
-				(bold yes)
 			)
-			(justify left bottom)
+			(justify right)
 		)
-		(uuid "aec8895c-c720-45c0-9ef4-29957636b659")
+		(uuid "4d5820ea-d335-4b25-84ed-3121a94d18d4")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 68.6186 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
 	)
-	(label "3V3"
-		(at 107.95 93.98 180)
+	(global_label "CS"
+		(shape input)
+		(at 76.2 96.52 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
-				(bold yes)
 			)
-			(justify right bottom)
+			(justify right)
 		)
-		(uuid "ba773891-f34d-402f-b7d3-4673e834ff8b")
+		(uuid "4d91e0f3-c780-453d-9c31-f53f22c2cc2a")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 70.7353 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
 	)
-	(label "GSM_4V"
-		(at 146.05 92.71 0)
+	(global_label "MOSI"
+		(shape input)
+		(at 76.2 91.44 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right)
 		)
-		(uuid "f87fb6f7-9682-4ef9-83f0-3cdbe98a8b9b")
+		(uuid "55bd99e5-37d1-47b6-9c5f-359988b99b30")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 68.6186 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "GSM_4V"
+		(shape input)
+		(at 151.13 92.71 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "56a1b0ce-bede-4f07-8ddd-d3702c14459c")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 140.9482 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "GPS_TX"
+		(shape input)
+		(at 213.36 93.98 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "5de60283-c665-4385-8249-e56ca14e5d23")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 203.4806 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "GSM_RST"
+		(shape input)
+		(at 151.13 95.25 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "691fb1c8-3a05-4f2c-ab33-dbb3ebc803d4")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 139.7992 95.25 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "DIO0"
+		(shape input)
+		(at 107.95 91.44 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "8201edf3-a258-48c0-8a30-bd49a2f4c0d4")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 115.35 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "SCK"
+		(shape input)
+		(at 76.2 93.98 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "9a147f9b-541d-42c9-a35a-8e4c5c2635db")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 69.4653 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "RST"
+		(shape input)
+		(at 76.2 99.06 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "a3ad7ca4-253f-427f-b271-494907efdf69")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 69.7677 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "GPS_RX"
+		(shape input)
+		(at 213.36 96.52 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "a8c157a0-ea09-4b92-a8e6-0ee6a37023dc")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 203.1782 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "GSM_RX"
+		(shape input)
+		(at 151.13 97.79 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "caf1dae7-65bc-49b1-a69f-5286c0255e1d")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 140.7668 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "3V3"
+		(shape input)
+		(at 107.95 93.98 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "f165e311-43be-4052-a3c8-0c13d11c42b7")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 114.4428 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
 	)
 	(symbol
 		(lib_id "my-modules:NEO-6M-GPS-MODULE")
