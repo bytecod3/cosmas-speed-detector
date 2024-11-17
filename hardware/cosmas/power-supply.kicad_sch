@@ -1283,6 +1283,12 @@
 		)
 	)
 	(junction
+		(at 125.73 76.2)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "a20500d4-5c1b-46ec-b2e5-0927e52fee17")
+	)
+	(junction
 		(at 171.45 88.9)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -1290,7 +1296,27 @@
 	)
 	(wire
 		(pts
-			(xy 123.19 76.2) (xy 128.27 76.2)
+			(xy 125.73 76.2) (xy 128.27 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1120b37a-b83c-4b79-9995-b6f6119a25b4")
+	)
+	(wire
+		(pts
+			(xy 125.73 74.93) (xy 125.73 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1244dd3d-9dd2-4021-a6a9-4fe5eb83a69f")
+	)
+	(wire
+		(pts
+			(xy 123.19 76.2) (xy 125.73 76.2)
 		)
 		(stroke
 			(width 0)
@@ -1381,93 +1407,181 @@
 		)
 		(uuid "63b83998-73d3-4f02-a031-ad8b7401d102")
 	)
-	(label "5V"
-		(at 147.32 111.76 180)
+	(global_label "6V"
+		(shape input)
+		(at 171.45 76.2 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify right bottom)
+			(justify left)
 		)
-		(uuid "38053dba-8999-498f-9e16-cc6937fe528d")
+		(uuid "2a298fba-37f3-485d-8c97-2598b16ab00c")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 176.7333 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
 	)
-	(label "12V"
-		(at 124.46 76.2 0)
+	(global_label "12V"
+		(shape input)
+		(at 125.73 74.93 90)
 		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify left)
 		)
-		(uuid "423565f6-4a46-410b-b304-df9a0c471fb6")
+		(uuid "3ea0b4ae-8510-4a4b-96d5-d5f7deaeddee")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 125.73 68.4372 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
 	)
-	(label "GSM_4V"
-		(at 182.88 88.9 180)
+	(global_label "12V"
+		(shape input)
+		(at 171.45 109.22 90)
 		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify right bottom)
+			(justify left)
 		)
-		(uuid "4e8ef026-90b0-40ff-94da-6f12f00fa755")
-	)
-	(label "12V"
-		(at 171.45 109.22 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
+		(uuid "51eef20b-ed1b-45cc-82e7-625d4babc69c")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 171.45 102.7272 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
 			)
-			(justify left bottom)
 		)
-		(uuid "696acab6-f01f-47ea-a3df-0c7d8b1ab4af")
 	)
-	(label "5V"
-		(at 133.35 111.76 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "75d0354b-1004-431f-91fa-c8c80a692aec")
-	)
-	(label "6V"
-		(at 151.13 76.2 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "e4db9f66-dd87-4ed3-899f-7fb28d251e37")
-	)
-	(label "3V3"
-		(at 162.56 111.76 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "e876d45f-5d31-43fc-be56-c206f0e52422")
-	)
-	(label "12V"
+	(global_label "12V"
+		(shape input)
 		(at 118.11 111.76 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify right bottom)
+			(justify right)
 		)
-		(uuid "fecd1f48-e0a7-4f59-b02a-efd546e42e40")
+		(uuid "754a118c-a363-458e-a7c3-4799dd9bda38")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 111.6172 111.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "GSM_4V"
+		(shape input)
+		(at 182.88 88.9 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "7cd107bc-9f60-4074-ba07-ef1bc6749cbc")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 193.0618 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "5V"
+		(shape input)
+		(at 147.32 111.76 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "8c3158a5-2270-45bf-97be-2018c762ec5e")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 142.0367 111.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "5V"
+		(shape input)
+		(at 133.35 111.76 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "b1361780-357e-4883-9a7f-cab157039204")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 138.6333 111.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "3V3"
+		(shape input)
+		(at 162.56 111.76 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "b3c07a3d-0f80-4c42-bf09-1f7467142bfa")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 169.0528 111.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
 	)
 	(symbol
 		(lib_id "Device:LED")

@@ -1,4 +1,4 @@
-23657619035097824
+23662718215254708
 ARDUINO_PRO_MINI
 MODULE_ARDUINO_PRO_MINI
 
@@ -88892,6 +88892,13 @@ rotary encoder illuminated switch vertical
 0
 9
 8
+SIM800L-MODULE
+SIM800L-CORE
+
+
+0
+12
+12
 Sensor
 ASAIR_AM2302_P2.54mm_Lead2.75mm_TabDown
 Temperature and humidity module, http://akizukidenshi.com/download/ds/aosong/AM2302.pdf
@@ -96613,6 +96620,20 @@ Varistor VF
 0
 2
 2
+my-modules
+I2C_LCD_20X4
+
+
+0
+4
+4
+my-modules
+L298N_MOTOR_DRIVER
+
+
+0
+0
+0
 my-modules
 LM2596-BUCK-CONVERTER
 
