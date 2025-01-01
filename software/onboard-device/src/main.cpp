@@ -5,19 +5,21 @@
 #include <TinyGPSPlus.h>
 #include <LoRa.h>
 #include <SoftwareSerial.h>
+#include <math.h>
 
 HardwareSerial gsm(1);
 HardwareSerial gpsSerial(2);
 //SoftwareSerial gpsSerial(GPS_TX, GPS_RX);
 
 TinyGPSPlus gps;
-
-double blackspot_list[3][2] = {{}, {}, {}};
-
 double latitude;
 double longitude;
 uint8_t day=0, month=0, hr=0, mint=0, sec=0;
 uint16_t year=0;
+
+float blackspot_list[3][2] = {{-1.0, 33.02}, {-1.0, 40.02}, {-1, 50.02}};
+float current_coords[2] = {-1.0, 30.00};
+float earth_radius = 6378.0;
 
 LiquidCrystal_I2C lcd(LCD_ADDR, LCD_COLS, LCD_ROWS);  // set the LCD address to 0x3F for a 16 chars and 2 line display
 Motor mtr_1(EN1_A, EN1_B, IN1_1, IN1_2, IN1_3, IN1_4);
@@ -29,6 +31,28 @@ void init_motors();
 void read_gps();
 void update_lcd();
 void buzz();
+float getHaversineDistance(float, float, float, float);
+float deg2rad(float);
+
+float getHaversineDistance(float x1, float y1, float x2, float y2) {
+    /**
+     * Haversine formula for distance between 2 coordinates
+     * x1, y1 - black-spot coordinates
+     * x2, y2 - current vehicle coordinates
+     */
+
+    float del_lat_rad = deg2rad(x2-x1);
+    float del_long_rad = deg2rad(y2-y1);
+    float hav_lat = sin((del_lat_rad/2))*sin((del_lat_rad/2));
+    float hav_long = sin((del_long_rad/2))*sin((del_long_rad/2));
+    float hav_d = hav_lat + (cos(deg2rad(x1))*cos(deg2rad(x2))) * hav_long;
+    float d_km = 2 * earth_radius * asin(sqrt(hav_d));
+    return d_km;
+}
+
+float deg2rad(float a) {
+    return a * (MATH_PI/180);
+}
 
 void init_motors() {
     mtr_1.init_motor_pins();
@@ -178,6 +202,11 @@ void setup() {
     initGPS();
     buzz();
     buzz();
+
+    float d = getHaversineDistance(current_coords[0], current_coords[1],
+                         blackspot_list[0][0], blackspot_list[0][1]);
+    debug("Distance: "); debugln(d);
+
 }
 
 void loop() {

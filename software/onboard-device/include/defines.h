@@ -46,6 +46,6 @@
 #define IN1_4 33
 #define M1_PWM
 
-
+#define MATH_PI 3.142
 
 #endif
