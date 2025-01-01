@@ -17,7 +17,7 @@ double longitude;
 uint8_t day=0, month=0, hr=0, mint=0, sec=0;
 uint16_t year=0;
 
-float blackspot_list[3][2] = {{-1.0, 33.02}, {-1.0, 40.02}, {-1, 50.02}};
+float blackspot_list[3][2] = {{-1.0, 30.01}, {-1.0, 40.02}, {-1, 50.02}};
 float current_coords[2] = {-1.0, 30.00};
 float earth_radius = 6378.0;
 
@@ -30,6 +30,7 @@ void init_lora();
 void init_motors();
 void read_gps();
 void update_lcd();
+void updateLCDCustom(char*, char*, char*, char*);
 void buzz();
 float getHaversineDistance(float, float, float, float);
 float deg2rad(float);
@@ -192,6 +193,20 @@ void update_lcd() {
     lcd.clear();
 }
 
+void updateLCDCustom(char* msg1, char* msg2, char* msg3, char* msg4) {
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print(msg1);
+    lcd.setCursor(0, 1);
+    lcd.print(msg2);
+    lcd.setCursor(0, 2);
+    lcd.print(msg3);
+    lcd.setCursor(0, 3);
+    lcd.print(msg4);
+
+    delay(2000);
+}
+
 void setup() {
 
     init_serial();
@@ -203,13 +218,34 @@ void setup() {
     buzz();
     buzz();
 
-    float d = getHaversineDistance(current_coords[0], current_coords[1],
-                         blackspot_list[0][0], blackspot_list[0][1]);
-    debug("Distance: "); debugln(d);
+    mtr_1.start(mtr_1.get_speed());
 
 }
 
 void loop() {
     read_gps();
     update_lcd();
+
+    float d = getHaversineDistance(current_coords[0], current_coords[1],
+                                   blackspot_list[0][0], blackspot_list[0][1]);
+    if(d < BLACKSPOT_RADIUS) {
+        // beep
+        // show on screen
+        updateLCDCustom("Blackspot Area!",
+                        "Reduce speed",
+                        "..." ,
+                        "Auto reducing..");
+        // decelerate
+        mtr_1.set_speed(BLACKSPOT_SPEED);
+        mtr_1.move_forward();
+    } else {
+        // maintain
+        // display road clear
+        updateLCDCustom("Road clear!",
+                        "",
+                        "",
+                        "");
+
+        mtr_1.set_speed(NORMAL_SPEED);
+    }
 }

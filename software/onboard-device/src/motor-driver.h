@@ -25,7 +25,8 @@ public:
     void set_speed(int);
     static int get_speed();
     void accelerate();
-    void decelerate();
+    void decelerateToStop();
+    void decelerate(int);
 };
 
 

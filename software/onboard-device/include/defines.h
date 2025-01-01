@@ -45,7 +45,9 @@
 #define IN1_3 4
 #define IN1_4 33
 #define M1_PWM
-
 #define MATH_PI 3.142
+#define BLACKSPOT_RADIUS 3
+#define BLACKSPOT_SPEED 120 // PWM values
+#define NORMAL_SPEED 240
 
 #endif

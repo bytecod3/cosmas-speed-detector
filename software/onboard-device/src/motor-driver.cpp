@@ -26,7 +26,7 @@ Motor::Motor(int ena, int enb, int in1, int in2, int in3, int in4) {
 /**
  * initial speed
  */
- int Motor::speed = 150;
+ int Motor::speed = 220;
 
 /**
  * @brief Initialize motor pin-modes
@@ -59,10 +59,10 @@ void Motor::start(int s) {
     analogWrite(this->_enb, this->get_speed());
 
     // turn on motor A and B
-    digitalWrite(this->_in1, HIGH);
-    digitalWrite(this->_in2, LOW);
-    digitalWrite(this->_in3, HIGH);
-    digitalWrite(this->_in4, LOW);
+    digitalWrite(this->_in1, LOW);
+    digitalWrite(this->_in2, HIGH);
+    digitalWrite(this->_in3, LOW);
+    digitalWrite(this->_in4, HIGH);
 }
 
 /**
@@ -91,6 +91,9 @@ void Motor::turn_right() {
  * @brief move forward
  */
 void Motor::move_forward() {
+    analogWrite(this->_ena, this->get_speed());
+    analogWrite(this->_enb, this->get_speed());
+
     digitalWrite(this->_in1, LOW);
     digitalWrite(this->_in2, HIGH);
     digitalWrite(this->_in3, LOW);
@@ -118,10 +121,11 @@ void Motor::stop() {
     digitalWrite(this->_in4, LOW);
 }
 
+
 /*
- * @brief Decelerate motor
+ * @brief Decelerate motor to stop
  */
-void Motor::decelerate() {
+void Motor::decelerateToStop() {
     int s = this->get_speed();
 
     // decelerate from speed s to 0
@@ -133,6 +137,17 @@ void Motor::decelerate() {
 
     // turn off the motors after deceleration
     this->stop();
+}
+
+void Motor::decelerate(int f) {
+    int s = this->get_speed();
+
+    for(int i = s; i > f; i-- ) {
+        analogWrite(this->_ena, i);
+        analogWrite(this->_enb, i);
+        delay(DECEL_DELAY);
+    }
+
 }
 
 void Motor::set_speed(int s) {
