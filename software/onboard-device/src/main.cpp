@@ -4,19 +4,29 @@
 #include <LiquidCrystal_I2C.h>
 #include <TinyGPSPlus.h>
 #include <LoRa.h>
+#include <SoftwareSerial.h>
 
+HardwareSerial gsm(1);
 HardwareSerial gpsSerial(2);
-TinyGPSPlus gps;
-float latitude, longitude;
-LiquidCrystal_I2C lcd(LCD_ADDR, LCD_COLS, LCD_ROWS);  // set the LCD address to 0x3F for a 16 chars and 2 line display
+//SoftwareSerial gpsSerial(GPS_TX, GPS_RX);
 
+TinyGPSPlus gps;
+
+double blackspot_list[3][2] = {{}, {}, {}};
+
+double latitude;
+double longitude;
+uint8_t day=0, month=0, hr=0, mint=0, sec=0;
+uint16_t year=0;
+
+LiquidCrystal_I2C lcd(LCD_ADDR, LCD_COLS, LCD_ROWS);  // set the LCD address to 0x3F for a 16 chars and 2 line display
 Motor mtr_1(EN1_A, EN1_B, IN1_1, IN1_2, IN1_3, IN1_4);
 
 void init_serial();
 void init_lcd();
 void init_lora();
 void init_motors();
-void get_gps();
+void read_gps();
 void update_lcd();
 void buzz();
 
@@ -29,7 +39,11 @@ void init_motors() {
  */
 void init_serial() {
     Serial.begin(BAUD);
-    gpsSerial.begin(GPS_BAUD);
+}
+
+void initGPS(){
+    gpsSerial.begin(GPS_BAUD, SERIAL_8N1, GPS_RX,GPS_TX);
+    debugln("Initialized GPS");
 }
 
 /**
@@ -77,32 +91,69 @@ void init_lora() {
     }
 }
 
-void get_gps() {
-    // Get location
+void read_gps() {
+//    debugln(gpsSerial.read());
+    gps.encode(gpsSerial.read());
+
     while (gpsSerial.available() > 0) {
         gps.encode(gpsSerial.read());
 
-        if (gps.location.isUpdated()) {
-            latitude = gps.location.lat();
-            longitude = gps.location.lng();
+        if (gps.location.isUpdated()){
+            // Get location
+            debug("Location: ");
+            if(gps.location.isValid()) {
+                latitude = gps.location.lat();
+                Serial.print(gps.location.lat(), 2);
+                debug(F(","));
 
-            Serial.print("Latitude= "); 
-            Serial.print(latitude, 2);
-            Serial.print(" Longitude= "); 
-            Serial.println(longitude, 2);
-             
+                longitude = gps.location.lng();
+                Serial.print(gps.location.lng(), 2);
 
-            // time - in 24 hr format
-            // Hour (0-23) (u8) 
-            Serial.print(gps.time.hour());Serial.print(":");
-            // Minute (0-59) (u8)
-            Serial.print(gps.time.minute());Serial.print(":");
-            // Second (0-59) (u8)
-            Serial.print(gps.time.second());
-            Serial.println();
-            // 100ths of a second (0-99) (u8)
-        } 
+            } else {
+                debug(F("INVALID"));
+            }
+
+            // Get time and date
+            debug(F("Date/time: "));
+            if(gps.date.isValid()) {
+                month = gps.date.month();
+                debug(month);
+                debug(F("/"));
+
+                day = gps.date.day();
+                debug(day);
+                debug(F("/"));
+
+                year = gps.date.year();
+                debug(year);
+            } else {
+                debug(F("INVALID"));
+            }
+
+            // time
+            debug(F(" "));
+            if (gps.time.isValid()) {
+
+                hr = gps.time.hour();
+                if (hr < 10) debug(F("0"));
+                debug(hr);
+
+                mint = gps.time.minute();
+                if (mint < 10) debug(F("0"));
+                debug(mint);
+
+                sec = gps.time.second();
+                if (sec < 10) debug(F("0"));
+                debug(sec);
+
+            } else {
+                debug(F("INVALID"));
+            }
+
+            debugln();
+        }
     }
+
 }
 
 void update_lcd() {
@@ -124,23 +175,12 @@ void setup() {
     init_lora();
     init_buzzer();
     init_motors();
-
+    initGPS();
     buzz();
     buzz();
-
-    mtr_1.start(100);
-    delay(3000);
-    mtr_1.stop();
-
-    mtr_1.start(200);
-    delay(3000);
-    mtr_1.stop();
-
 }
 
 void loop() {
-
-    get_gps();
+    read_gps();
     update_lcd();
-
 }

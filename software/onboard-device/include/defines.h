@@ -21,6 +21,8 @@
 
 #define BAUD            115200
 #define GPS_BAUD        9600
+#define GPS_RX          26
+#define GPS_TX          25
 #define BUZZER          2
 #define BUZZ_DELAY      300
 #define STARTUP_DELAY   3000
@@ -42,9 +44,8 @@
 #define IN1_2 5
 #define IN1_3 4
 #define IN1_4 33
-
-
 #define M1_PWM
+
 
 
 #endif
