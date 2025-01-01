@@ -16,13 +16,13 @@ private:
 public:
     Motor(int, int, int, int, int, int); // constructor
     void init_motor_pins();
-    void start();
+    void start(int);
     void stop();
     void turn_left();
     void turn_right();
     void reverse();
     void move_forward();
-    void set_start_speed();
+    void set_speed(int);
     static int get_speed();
     void accelerate();
     void decelerate();

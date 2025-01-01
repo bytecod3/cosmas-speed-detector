@@ -11,7 +11,6 @@ float latitude, longitude;
 LiquidCrystal_I2C lcd(LCD_ADDR, LCD_COLS, LCD_ROWS);  // set the LCD address to 0x3F for a 16 chars and 2 line display
 
 Motor mtr_1(EN1_A, EN1_B, IN1_1, IN1_2, IN1_3, IN1_4);
-Motor mtr_2(EN2_A, EN2_B, IN2_1, IN2_2, IN2_3, IN2_4);
 
 void init_serial();
 void init_lcd();
@@ -23,7 +22,6 @@ void buzz();
 
 void init_motors() {
     mtr_1.init_motor_pins();
-    mtr_2.init_motor_pins();
 }
 
 /**
@@ -120,22 +118,24 @@ void update_lcd() {
 }
 
 void setup() {
+
     init_serial();
     init_lcd();
     init_lora();
     init_buzzer();
+    init_motors();
 
     buzz();
     buzz();
 
-    // test motors
-    mtr_1.start();
-    mtr_2.start();
-
-    delay(5000);
-
+    mtr_1.start(100);
+    delay(3000);
     mtr_1.stop();
-    mtr_2.stop();
+
+    mtr_1.start(200);
+    delay(3000);
+    mtr_1.stop();
+
 }
 
 void loop() {

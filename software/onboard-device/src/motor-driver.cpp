@@ -53,7 +53,8 @@ int Motor::get_speed() {
 /**
  * @brief Start the motors
  */
-void Motor::start() {
+void Motor::start(int s) {
+    this->set_speed(s);
     analogWrite(this->_ena, this->get_speed());
     analogWrite(this->_enb, this->get_speed());
 
@@ -132,5 +133,14 @@ void Motor::decelerate() {
 
     // turn off the motors after deceleration
     this->stop();
+}
 
+void Motor::set_speed(int s) {
+    if(s > 255) {
+        this->speed = 255;
+    } else if(s < 0) {
+        this->speed = 0;
+    } else {
+        this->speed = s;
+    }
 }
