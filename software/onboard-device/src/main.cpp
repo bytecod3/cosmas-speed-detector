@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "defines.h"
+#include "motor-driver.h"
 #include <LiquidCrystal_I2C.h>
 #include <TinyGPSPlus.h>
 #include <LoRa.h>
@@ -9,14 +10,24 @@ TinyGPSPlus gps;
 float latitude, longitude;
 LiquidCrystal_I2C lcd(LCD_ADDR, LCD_COLS, LCD_ROWS);  // set the LCD address to 0x3F for a 16 chars and 2 line display
 
+Motor mtr_1(EN1_A, EN1_B, IN1_1, IN1_2, IN1_3, IN1_4);
+Motor mtr_2(EN2_A, EN2_B, IN2_1, IN2_2, IN2_3, IN2_4);
+
 void init_serial();
 void init_lcd();
 void init_lora();
+void init_motors();
 void get_gps();
 void update_lcd();
+void buzz();
+
+void init_motors() {
+    mtr_1.init_motor_pins();
+    mtr_2.init_motor_pins();
+}
 
 /**
- * @brief initalize the serial monitor
+ * @brief initialize the serial monitor
  */
 void init_serial() {
     Serial.begin(BAUD);
@@ -34,10 +45,26 @@ void init_lcd() {
 
     // Welcome message
     lcd.setCursor(4,0); // character 2 on line 0
-    lcd.print("Hello there!");
+    lcd.print("Hello Cosmas!");
 
     lcd.setCursor(6,1);
     lcd.print("Welcome.");
+
+    delay(STARTUP_DELAY);
+
+}
+
+void init_buzzer() {
+    pinMode(BUZZER, OUTPUT);
+}
+
+void buzz() {
+    digitalWrite(BUZZER, HIGH);
+    delay(BUZZ_DELAY);
+
+    digitalWrite(BUZZER, LOW);
+    delay(BUZZ_DELAY);
+
 }
 
 /**
@@ -96,6 +123,19 @@ void setup() {
     init_serial();
     init_lcd();
     init_lora();
+    init_buzzer();
+
+    buzz();
+    buzz();
+
+    // test motors
+    mtr_1.start();
+    mtr_2.start();
+
+    delay(5000);
+
+    mtr_1.stop();
+    mtr_2.stop();
 }
 
 void loop() {
