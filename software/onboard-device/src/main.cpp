@@ -9,7 +9,6 @@
 
 HardwareSerial gsm(1);
 HardwareSerial gpsSerial(2);
-//SoftwareSerial gpsSerial(GPS_TX, GPS_RX);
 
 TinyGPSPlus gps;
 double latitude;
@@ -21,6 +20,15 @@ float blackspot_list[3][2] = {{-1.0, 30.01}, {-1.0, 40.02}, {-1, 50.02}};
 float current_coords[2] = {-1.0, 30.00};
 float earth_radius = 6378.0;
 
+char loraMSG[256]; // to store lora message
+char number_plate[10] = "KDA-005D";
+char blackspotID[] = "BLK001";
+float vehicle_speed;
+char violation_time[];
+char vehicle_location[];
+char blackspot_location[];
+char nearest_station[] = "SALGAA STATION"; 
+
 LiquidCrystal_I2C lcd(LCD_ADDR, LCD_COLS, LCD_ROWS);  // set the LCD address to 0x3F for a 16 chars and 2 line display
 Motor mtr_1(EN1_A, EN1_B, IN1_1, IN1_2, IN1_3, IN1_4);
 
@@ -28,12 +36,16 @@ void init_serial();
 void init_lcd();
 void init_lora();
 void init_motors();
+void initGSM();
+void sendSMS(String msg);
+void updateSerial();
 void read_gps();
 void update_lcd();
 void updateLCDCustom(char*, char*, char*, char*);
 void buzz();
 float getHaversineDistance(float, float, float, float);
 float deg2rad(float);
+void sendLORAMsg(char*);
 
 float getHaversineDistance(float x1, float y1, float x2, float y2) {
     /**
@@ -64,6 +76,45 @@ void init_motors() {
  */
 void init_serial() {
     Serial.begin(BAUD);
+}
+
+void initGSM() {
+    Serial.println("[+]Initializing GSM module...");
+    gsm.begin(GSM_BAUD, SERIAL_8N1, GSM_RX, GSM_TX);
+
+    gsm.println("AT"); // handshake
+    updateSerial();
+    gsm.println("AT+CSQ"); // check signal quality
+    updateSerial();
+    gsm.println("AT+CCID"); // confirm sim is plugged
+    updateSerial();
+    gsm.println("AT+CREG?"); // is it registered
+    updateSerial();
+    gsm.println("AT+COPS?"); // check which network
+    updateSerial();
+
+    // Serial2.print("AT+CMGF=1\r"); //SMS text mode
+
+    // // set up the GSM to send SMS to ESP32, not the notification only
+    gsm.println("AT+CNMI=2,2,0,0,0");
+    delay(1000);
+
+}
+
+/**
+ * Send SMS 
+ */
+void sendSMS(String msg){
+    gsm.println("AT+CMGF=1");
+    delay(1000);
+    // updateSerial();
+    gsm.println("AT+CMGS=\"+254700750148\"");
+    delay(1000);
+    gsm.println(msg); // send SMS
+    delay(100);
+    gsm.write(0x1A); //ascii code for ctrl+z, DEC->26, HEX->0x1A
+    delay(1000);
+    debugln("SMS Sent Successfully.");
 }
 
 void initGPS(){
@@ -162,7 +213,7 @@ void read_gps() {
                 hr = gps.time.hour();
                 if (hr < 10) debug(F("0"));
                 debug(hr);
-
+                                                              
                 mint = gps.time.minute();
                 if (mint < 10) debug(F("0"));
                 debug(mint);
@@ -207,6 +258,26 @@ void updateLCDCustom(char* msg1, char* msg2, char* msg3, char* msg4) {
     delay(2000);
 }
 
+void updateSerial() {
+  delay(200);
+  while (Serial.available()) 
+  {
+    gsm.write(Serial.read());//Forward what Serial received to Software Serial Port
+  }
+  while(gsm.available()) 
+  {
+    Serial.write(gsm.read());//Forward what Software Serial received to Serial Port
+  }
+}
+
+void sendLORAMsg(char* msg) {
+    debugln("[...]Sending LORA message");
+
+    LoRa.beginPacket();
+    LoRa.print(msg);
+    LoRa.endPacket();
+    delay(200);
+}
 void setup() {
 
     init_serial();
@@ -217,6 +288,8 @@ void setup() {
     initGPS();
     buzz();
     buzz();
+
+    initGSM();
 
     mtr_1.start(mtr_1.get_speed());
 
@@ -248,4 +321,23 @@ void loop() {
 
         mtr_1.set_speed(NORMAL_SPEED);
     }
+
+    // check violation 
+    
+    // create messages
+    sprintf(violation_time, "[%d:%d:%d]-[%d/%d/%d]", hr, mint, sec,day,month,year);
+    sprintf(vehicle_location, "[%.2f,%.2f]", latitude, longitude);
+    sprintf(blackspot_location, "[%.2f,%.2f]", blackspot_list[0][0], blackspot_list[0][0]); // first blackspot in the list
+
+    // compose lora packet 
+    sprintf(loraMSG, "plate:%s, speed:%f, time:%s, vehicle_location:%s, blackspot_id:%s, blackspot-location:%s, station:%s",
+            number_plate,// vehicle number plate
+            vehicle_speed,// speed
+            violation_time,// time violated
+            vehicle_location, // location of the vehicle 
+            blackspotID,// blackspot ID
+            blackspot_location,// blackspot coordinates 
+            nearest_station // nearest police station
+    );
+
 }

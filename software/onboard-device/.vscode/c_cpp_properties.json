@@ -10,6 +10,8 @@
             "includePath": [
                 "f:/5th-year/project/cosmas/software/onboard-device/include",
                 "f:/5th-year/project/cosmas/software/onboard-device/src",
+                "f:/5th-year/project/cosmas/software/onboard-device/.pio/libdeps/esp32doit-devkit-v1/EspSoftwareSerial/src",
+                "f:/5th-year/project/cosmas/software/onboard-device/.pio/libdeps/esp32doit-devkit-v1/ghostl/src",
                 "f:/5th-year/project/cosmas/software/onboard-device/.pio/libdeps/esp32doit-devkit-v1/LoRa/src",
                 "C:/Users/PC/.platformio/packages/framework-arduinoespressif32/libraries/SPI/src",
                 "f:/5th-year/project/cosmas/software/onboard-device/.pio/libdeps/esp32doit-devkit-v1/TinyGPSPlus/src",
@@ -250,6 +252,8 @@
                 "path": [
                     "f:/5th-year/project/cosmas/software/onboard-device/include",
                     "f:/5th-year/project/cosmas/software/onboard-device/src",
+                    "f:/5th-year/project/cosmas/software/onboard-device/.pio/libdeps/esp32doit-devkit-v1/EspSoftwareSerial/src",
+                    "f:/5th-year/project/cosmas/software/onboard-device/.pio/libdeps/esp32doit-devkit-v1/ghostl/src",
                     "f:/5th-year/project/cosmas/software/onboard-device/.pio/libdeps/esp32doit-devkit-v1/LoRa/src",
                     "C:/Users/PC/.platformio/packages/framework-arduinoespressif32/libraries/SPI/src",
                     "f:/5th-year/project/cosmas/software/onboard-device/.pio/libdeps/esp32doit-devkit-v1/TinyGPSPlus/src",
