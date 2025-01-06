@@ -23,7 +23,7 @@ float earth_radius = 6378.0;
 char loraMSG[256]; // to store lora message
 char number_plate[10] = "KDA-005D";
 char blackspotID[] = "BLK001";
-float vehicle_speed;
+float vehicle_speed = 50;
 char violation_time[];
 char vehicle_location[];
 char blackspot_location[];
@@ -46,6 +46,7 @@ void buzz();
 float getHaversineDistance(float, float, float, float);
 float deg2rad(float);
 void sendLORAMsg(char*);
+uint8_t checkTamper();
 
 float getHaversineDistance(float x1, float y1, float x2, float y2) {
     /**
@@ -278,6 +279,17 @@ void sendLORAMsg(char* msg) {
     LoRa.endPacket();
     delay(200);
 }
+
+// check if the speed governor has been tampered with
+// simulated by using a rocker switch
+uint8_t checkTamper() {
+    if(!digitalRead(TAMPER_SWITCH)) {
+        return 1; // tampered with
+    } else {
+        return 0;
+    }
+}
+
 void setup() {
 
     init_serial();
@@ -290,6 +302,7 @@ void setup() {
     buzz();
 
     initGSM();
+    pinMode(TAMPER_SWITCH, INPUT);
 
     mtr_1.start(mtr_1.get_speed());
 
@@ -301,43 +314,61 @@ void loop() {
 
     float d = getHaversineDistance(current_coords[0], current_coords[1],
                                    blackspot_list[0][0], blackspot_list[0][1]);
-    if(d < BLACKSPOT_RADIUS) {
-        // beep
-        // show on screen
-        updateLCDCustom("Blackspot Area!",
-                        "Reduce speed",
-                        "..." ,
-                        "Auto reducing..");
-        // decelerate
-        mtr_1.set_speed(BLACKSPOT_SPEED);
-        mtr_1.move_forward();
-    } else {
-        // maintain
-        // display road clear
-        updateLCDCustom("Road clear!",
-                        "",
-                        "",
-                        "");
+    
+    // VIOLATION REPORTING USING GSM AND LORA TO THE AUTHORITIES 
+    if(checkTamper()) {
+        if(d < BLACKSPOT_RADIUS) {
+            if(vehicle_speed > BLACKSPOT_SPEED_LIMIT) {
+                // this is a violation 
+                sprintf(violation_time, "[%d:%d:%d]-[%d/%d/%d]", hr, mint, sec,day,month,year);
+                sprintf(vehicle_location, "[%.2f,%.2f]", latitude, longitude);
+                sprintf(blackspot_location, "[%.2f,%.2f]", blackspot_list[0][0], blackspot_list[0][0]); // first blackspot in the list
 
-        mtr_1.set_speed(NORMAL_SPEED);
+                // compose lora packet 
+                sprintf(loraMSG, "plate:%s, speed:%f, time:%s, vehicle_location:%s, blackspot_id:%s, blackspot-location:%s, station:%s",
+                        number_plate,// vehicle number plate
+                        vehicle_speed,// speed
+                        violation_time,// time violated
+                        vehicle_location, // location of the vehicle 
+                        blackspotID,// blackspot ID
+                        blackspot_location,// blackspot coordinates 
+                        nearest_station // nearest police station
+                );
+
+                // send lora message on violation 
+                sendLORAMsg(loraMSG);
+
+                // send GSM messages 
+                
+            }
+        }
+    } else { 
+        // no tamper 
+        // DYNAMIC REDUCTION IN VEHICLE SPEED AT BLACKSPOT USING THE HAVERSINE FORMULA
+        if(d < BLACKSPOT_RADIUS) {
+            // beep
+            // show on screen
+            updateLCDCustom("Blackspot Area!",
+                            "Reduce speed",
+                            "..." ,
+                            "Auto reducing..");
+            // decelerate
+            mtr_1.set_speed(BLACKSPOT_SPEED);
+            mtr_1.move_forward();
+        } else {
+            // maintain
+            // display road clear
+            updateLCDCustom("Road clear!",
+                            "",
+                            "",
+                            "");
+
+            mtr_1.set_speed(NORMAL_SPEED);
+        }   
+
+
     }
 
-    // check violation 
     
-    // create messages
-    sprintf(violation_time, "[%d:%d:%d]-[%d/%d/%d]", hr, mint, sec,day,month,year);
-    sprintf(vehicle_location, "[%.2f,%.2f]", latitude, longitude);
-    sprintf(blackspot_location, "[%.2f,%.2f]", blackspot_list[0][0], blackspot_list[0][0]); // first blackspot in the list
-
-    // compose lora packet 
-    sprintf(loraMSG, "plate:%s, speed:%f, time:%s, vehicle_location:%s, blackspot_id:%s, blackspot-location:%s, station:%s",
-            number_plate,// vehicle number plate
-            vehicle_speed,// speed
-            violation_time,// time violated
-            vehicle_location, // location of the vehicle 
-            blackspotID,// blackspot ID
-            blackspot_location,// blackspot coordinates 
-            nearest_station // nearest police station
-    );
 
 }

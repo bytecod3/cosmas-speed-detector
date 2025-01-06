@@ -55,5 +55,7 @@
 #define GSM_RX 16
 #define GSM_TX 17
 
+#define TAMPER_SWITCH 26
+#define BLACKSPOT_SPEED_LIMIT 100
 
 #endif
