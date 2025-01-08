@@ -25,7 +25,7 @@
 #define GPS_RX          26
 #define GPS_TX          25
 #define BUZZER          2
-#define BUZZ_DELAY      300
+#define BUZZ_DELAY      200
 #define STARTUP_DELAY   3000
 
 /* LORA pins */
@@ -48,14 +48,13 @@
 #define M1_PWM
 #define MATH_PI 3.142
 #define BLACKSPOT_RADIUS 3
-#define BLACKSPOT_SPEED 120 // PWM values
+#define BLACKSPOT_SPEED_LIMIT 120 // PWM values
 #define NORMAL_SPEED 240
 
 /*============================GSM VARIABLES=============================*/
 #define GSM_RX 16
 #define GSM_TX 17
 
-#define TAMPER_SWITCH 26
-#define BLACKSPOT_SPEED_LIMIT 100
+#define TAMPER_SWITCH 36
 
 #endif

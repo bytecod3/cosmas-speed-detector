@@ -16,7 +16,10 @@ double longitude;
 uint8_t day=0, month=0, hr=0, mint=0, sec=0;
 uint16_t year=0;
 
-float blackspot_list[3][2] = {{-1.0, 30.01}, {-1.0, 40.02}, {-1, 50.02}};
+float blackspot_list[3][2] = {
+    {-1.0, 30.01},
+     {-1.0, 30.4},
+      {-1, 30.8}};
 float current_coords[2] = {-1.0, 30.00};
 float earth_radius = 6378.0;
 
@@ -24,10 +27,10 @@ char loraMSG[256]; // to store lora message
 char number_plate[10] = "KDA-005D";
 char blackspotID[] = "BLK001";
 float vehicle_speed = 50;
-char violation_time[];
-char vehicle_location[];
-char blackspot_location[];
-char nearest_station[] = "SALGAA STATION"; 
+char violation_time[50];
+char vehicle_location[50];
+char blackspot_location[50];
+char nearest_station[50] = "SALGAA STATION"; 
 
 LiquidCrystal_I2C lcd(LCD_ADDR, LCD_COLS, LCD_ROWS);  // set the LCD address to 0x3F for a 16 chars and 2 line display
 Motor mtr_1(EN1_A, EN1_B, IN1_1, IN1_2, IN1_3, IN1_4);
@@ -291,7 +294,6 @@ uint8_t checkTamper() {
 }
 
 void setup() {
-
     init_serial();
     init_lcd();
     init_lora();
@@ -300,12 +302,9 @@ void setup() {
     initGPS();
     buzz();
     buzz();
-
     initGSM();
     pinMode(TAMPER_SWITCH, INPUT);
-
     mtr_1.start(mtr_1.get_speed());
-
 }
 
 void loop() {
@@ -317,8 +316,14 @@ void loop() {
     
     // VIOLATION REPORTING USING GSM AND LORA TO THE AUTHORITIES 
     if(checkTamper()) {
+        Serial.println("Tamper on");
         if(d < BLACKSPOT_RADIUS) {
+            // get vehicle speed 
+            vehicle_speed = mtr_1.get_speed();
+            Serial.println(vehicle_speed);
+
             if(vehicle_speed > BLACKSPOT_SPEED_LIMIT) {
+                Serial.println("Violated");
                 // this is a violation 
                 sprintf(violation_time, "[%d:%d:%d]-[%d/%d/%d]", hr, mint, sec,day,month,year);
                 sprintf(vehicle_location, "[%.2f,%.2f]", latitude, longitude);
@@ -340,9 +345,13 @@ void loop() {
 
                 // send GSM messages 
                 
+                // update screen
+                updateLCDCustom("Blackspot Area!", "Speed violation", "Reporting...", "");
+                buzz();
             }
         }
     } else { 
+        Serial.println("Tamper off");
         // no tamper 
         // DYNAMIC REDUCTION IN VEHICLE SPEED AT BLACKSPOT USING THE HAVERSINE FORMULA
         if(d < BLACKSPOT_RADIUS) {
@@ -353,7 +362,7 @@ void loop() {
                             "..." ,
                             "Auto reducing..");
             // decelerate
-            mtr_1.set_speed(BLACKSPOT_SPEED);
+            mtr_1.set_speed(BLACKSPOT_SPEED_LIMIT);
             mtr_1.move_forward();
         } else {
             // maintain
@@ -362,13 +371,8 @@ void loop() {
                             "",
                             "",
                             "");
-
             mtr_1.set_speed(NORMAL_SPEED);
         }   
 
-
     }
-
-    
-
 }
