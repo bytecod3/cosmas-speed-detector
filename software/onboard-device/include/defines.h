@@ -51,6 +51,14 @@
 #define BLACKSPOT_SPEED_LIMIT 120 // PWM values
 #define NORMAL_SPEED 240
 
+#define NUM_BLACKSPOTS 4
+
+// for different blackspot areas, different speed 
+#define BLACKSPOT1_SPEED    90 // A BLACKSPOT
+#define BLACKSPOT2_SPEED    120
+#define BLACKSPOT3_SPEED    200
+#define BLACKSPOT4_SPEED    150 // A BLACKSPOT
+
 /*============================GSM VARIABLES=============================*/
 #define GSM_RX 16
 #define GSM_TX 17

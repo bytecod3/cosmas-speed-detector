@@ -16,11 +16,14 @@ double longitude;
 uint8_t day=0, month=0, hr=0, mint=0, sec=0;
 uint16_t year=0;
 
-float blackspot_list[3][2] = {
-    {-1.0, 30.01},
-     {-1.0, 30.4},
-      {-1, 30.8}};
-float current_coords[2] = {-1.0, 30.00};
+float current_coords[2] = {-1.0, 30.00}; // our current location
+float blackspot_list[NUM_BLACKSPOTS][2] = {
+    {-1.0, 30.01},  // black spot area 1 - within blackspot radius BY 1 km
+    {-1.0, 30.4},   // black spot area 2 - outside by 44 km
+    {-1, 30.8},    // black spot are 3 - outside by 88 km
+    {-1, 30.02}     // black spot area 4 - within the radius by 2 km, but different speed
+};
+
 float earth_radius = 6378.0;
 
 char loraMSG[256]; // to store lora message
@@ -34,6 +37,10 @@ char nearest_station[50] = "SALGAA STATION";
 
 LiquidCrystal_I2C lcd(LCD_ADDR, LCD_COLS, LCD_ROWS);  // set the LCD address to 0x3F for a 16 chars and 2 line display
 Motor mtr_1(EN1_A, EN1_B, IN1_1, IN1_2, IN1_3, IN1_4);
+
+char new_speed_buffer[10];
+char speed_limit_message_buffer[20];
+char curr_speed_buffer[20];
 
 void init_serial();
 void init_lcd();
@@ -311,68 +318,126 @@ void loop() {
     read_gps();
     update_lcd();
 
-    float d = getHaversineDistance(current_coords[0], current_coords[1],
-                                   blackspot_list[0][0], blackspot_list[0][1]);
-    
-    // VIOLATION REPORTING USING GSM AND LORA TO THE AUTHORITIES 
-    if(checkTamper()) {
-        Serial.println("Tamper on");
-        if(d < BLACKSPOT_RADIUS) {
-            // get vehicle speed 
-            vehicle_speed = mtr_1.get_speed();
-            Serial.println(vehicle_speed);
+    // this is purely for demo purposes
+    // loop through each coordinate to check if it is within or outside the radius of the blackspot
+    // each time, we check the tamper and dynamic speed reduction
+    for (int i =0 ; i < NUM_BLACKSPOTS; i++) {
 
-            if(vehicle_speed > BLACKSPOT_SPEED_LIMIT) {
-                Serial.println("Violated");
-                // this is a violation 
-                sprintf(violation_time, "[%d:%d:%d]-[%d/%d/%d]", hr, mint, sec,day,month,year);
-                sprintf(vehicle_location, "[%.2f,%.2f]", latitude, longitude);
-                sprintf(blackspot_location, "[%.2f,%.2f]", blackspot_list[0][0], blackspot_list[0][0]); // first blackspot in the list
-
-                // compose lora packet 
-                sprintf(loraMSG, "plate:%s, speed:%f, time:%s, vehicle_location:%s, blackspot_id:%s, blackspot-location:%s, station:%s",
-                        number_plate,// vehicle number plate
-                        vehicle_speed,// speed
-                        violation_time,// time violated
-                        vehicle_location, // location of the vehicle 
-                        blackspotID,// blackspot ID
-                        blackspot_location,// blackspot coordinates 
-                        nearest_station // nearest police station
-                );
-
-                // send lora message on violation 
-                sendLORAMsg(loraMSG);
-
-                // send GSM messages 
-                
-                // update screen
-                updateLCDCustom("Blackspot Area!", "Speed violation", "Reporting...", "");
-                buzz();
-            }
+        if(i == 0) {
+            updateLCDCustom("======================", "BLACKSPOT AREA 1", "Inside radius", "======================");
+        } else if(i == 1) {
+            updateLCDCustom("======================", "BLACKSPOT AREA 2", "Outside radius", "======================");
+        } else if(i == 2) {
+            updateLCDCustom("======================", "BLACKSPOT AREA 3", "Outside radius", "======================");
         }
-    } else { 
-        Serial.println("Tamper off");
-        // no tamper 
-        // DYNAMIC REDUCTION IN VEHICLE SPEED AT BLACKSPOT USING THE HAVERSINE FORMULA
-        if(d < BLACKSPOT_RADIUS) {
-            // beep
-            // show on screen
-            updateLCDCustom("Blackspot Area!",
-                            "Reduce speed",
-                            "..." ,
-                            "Auto reducing..");
-            // decelerate
-            mtr_1.set_speed(BLACKSPOT_SPEED_LIMIT);
-            mtr_1.move_forward();
-        } else {
-            // maintain
-            // display road clear
-            updateLCDCustom("Road clear!",
-                            "",
-                            "",
-                            "");
-            mtr_1.set_speed(NORMAL_SPEED);
-        }   
 
-    }
+        float d = getHaversineDistance(current_coords[0], current_coords[1],
+                                   blackspot_list[i][0], blackspot_list[i][1]);
+
+    
+        // VIOLATION REPORTING USING GSM AND LORA TO THE AUTHORITIES 
+        // HERE THE DEVICE HAS BEEN TAMPERED WITH 
+        // IT IS A VIOLATION IF WE OVERSPEED INSIDE THE BLACKSPOT AREA
+        if(checkTamper()) { 
+            if(d < BLACKSPOT_RADIUS) {
+                // get vehicle speed 
+                vehicle_speed = mtr_1.get_speed();
+                sprintf(curr_speed_buffer, "Vehicle speed: %d",vehicle_speed);
+
+                if(vehicle_speed > BLACKSPOT_SPEED_LIMIT) {
+                    // check which black spot we are operating from 
+                    if(i == 0) {
+                        sprintf(speed_limit_message_buffer,  "Speed limit: %d", BLACKSPOT1_SPEED);
+                    } else if(i == 2) {
+                        sprintf(speed_limit_message_buffer,  "Speed limit: %d", BLACKSPOT2_SPEED);
+                    } else {
+                        sprintf(speed_limit_message_buffer,  "Speed limit: %d", BLACKSPOT3_SPEED);
+                    }
+                    
+                    updateLCDCustom("Device tampered",speed_limit_message_buffer, curr_speed_buffer,"");
+                    delay(2000);
+                    updateLCDCustom("Blackspot Area!", "Speed violation", "Reporting...", "");
+                    buzz();
+
+                    // this is a violation 
+                    sprintf(violation_time, "[%d:%d:%d]-[%d/%d/%d]", hr, mint, sec,day,month,year);
+                    sprintf(vehicle_location, "[%.2f,%.2f]", latitude, longitude);
+                    sprintf(blackspot_location, "[%.2f,%.2f]", blackspot_list[0][0], blackspot_list[0][0]); // first blackspot in the list
+
+                    // compose lora packet 
+                    sprintf(loraMSG, "plate:%s, speed:%f, time:%s, vehicle_location:%s, blackspot_id:%s, blackspot-location:%s, station:%s",
+                            number_plate,// vehicle number plate
+                            vehicle_speed,// speed
+                            violation_time,// time violated
+                            vehicle_location, // location of the vehicle 
+                            blackspotID,// blackspot ID
+                            blackspot_location,// blackspot coordinates 
+                            nearest_station // nearest police station
+                    );
+
+                    // send lora message on violation 
+                    sendLORAMsg(loraMSG);
+
+                    // send GSM messages 
+                    
+                }
+            }
+
+        // DEVICE HAS NOT BEEN TAMPERED WITH HERE
+        // DYNAMIC REDUCTION IN VEHICLE SPEED AT BLACKSPOT USING THE HAVERSINE FORMULA
+        } else { 
+
+            if(d < BLACKSPOT_RADIUS) { // if we are inside the blackspot
+                // beep
+                // show on screen
+                if(i == 0) {
+                    sprintf(speed_limit_message_buffer,  "Speed limit: %d", BLACKSPOT1_SPEED);
+                } else if(i == 1) {
+                    sprintf(speed_limit_message_buffer,  "Speed limit: %d", BLACKSPOT2_SPEED);
+                } else if(i == 2) {
+                    sprintf(speed_limit_message_buffer,  "Speed limit: %d", BLACKSPOT3_SPEED);
+                } else if(i == 3) {
+                    sprintf(speed_limit_message_buffer,  "Speed limit: %d", BLACKSPOT4_SPEED);
+                } 
+
+                updateLCDCustom("Blackspot Area!",
+                                speed_limit_message_buffer,
+                                "Reduce speed" ,
+                                "Auto reducing..");
+
+                // decelerate
+                if(i == 0) {
+                    mtr_1.set_speed(BLACKSPOT1_SPEED);
+                } else if (i == 1) {
+                    mtr_1.set_speed(BLACKSPOT2_SPEED);
+                } else if(i == 2) {
+                    mtr_1.set_speed(BLACKSPOT3_SPEED);
+                } else if(i == 3) {
+                    mtr_1.set_speed(BLACKSPOT4_SPEED);
+                }
+                
+                mtr_1.move_forward();
+
+                sprintf(new_speed_buffer, "%d", mtr_1.get_speed());
+
+                // display new sped on the LCD screen 
+                updateLCDCustom("Regulated speed:", new_speed_buffer, "", "");
+
+            } else {
+                // maintain
+                // display road clear
+                updateLCDCustom("Road clear.",
+                                "Safe journey!",
+                                "",
+                                "");
+
+                mtr_1.set_speed(NORMAL_SPEED);
+                mtr_1.move_forward();
+            }   
+
+        }
+
+        updateLCDCustom("===================", "DONE CHECKING", "==================", "");
+        buzz();
+    } // end of for loop
 }
