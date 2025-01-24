@@ -29,7 +29,7 @@ float earth_radius = 6378.0;
 char loraMSG[256]; // to store lora message
 char number_plate[10] = "KDA-005D";
 char blackspotID[] = "BLK001";
-float vehicle_speed = 50;
+int vehicle_speed = 0;
 char violation_time[50];
 char vehicle_location[50];
 char blackspot_location[50];
@@ -322,13 +322,15 @@ void loop() {
     // loop through each coordinate to check if it is within or outside the radius of the blackspot
     // each time, we check the tamper and dynamic speed reduction
     for (int i =0 ; i < NUM_BLACKSPOTS; i++) {
-
+        
         if(i == 0) {
             updateLCDCustom("======================", "BLACKSPOT AREA 1", "Inside radius", "======================");
         } else if(i == 1) {
             updateLCDCustom("======================", "BLACKSPOT AREA 2", "Outside radius", "======================");
         } else if(i == 2) {
             updateLCDCustom("======================", "BLACKSPOT AREA 3", "Outside radius", "======================");
+        } else if(i == 3) {
+            updateLCDCustom("======================", "BLACKSPOT AREA 4", "Inside radius", "======================");
         }
 
         float d = getHaversineDistance(current_coords[0], current_coords[1],
@@ -338,20 +340,35 @@ void loop() {
         // VIOLATION REPORTING USING GSM AND LORA TO THE AUTHORITIES 
         // HERE THE DEVICE HAS BEEN TAMPERED WITH 
         // IT IS A VIOLATION IF WE OVERSPEED INSIDE THE BLACKSPOT AREA
+        
         if(checkTamper()) { 
+            vehicle_speed = mtr_1.get_speed();
             if(d < BLACKSPOT_RADIUS) {
-                // get vehicle speed 
-                vehicle_speed = mtr_1.get_speed();
-                sprintf(curr_speed_buffer, "Vehicle speed: %d",vehicle_speed);
+                Serial.println(vehicle_speed);
+                int t;
+                if (i == 0) {
+                    t = BLACKSPOT1_SPEED;
+                } else if (i == 1) {
+                    t = BLACKSPOT2_SPEED;
+                } else if (i == 2) {
+                    t = BLACKSPOT3_SPEED;
+                } else if (i == 3) {
+                    t = BLACKSPOT4_SPEED;
+                }
+                
+                if(vehicle_speed > t) {
+                    
+                    sprintf(curr_speed_buffer, "Vehicle speed: %d", vehicle_speed);
 
-                if(vehicle_speed > BLACKSPOT_SPEED_LIMIT) {
                     // check which black spot we are operating from 
                     if(i == 0) {
                         sprintf(speed_limit_message_buffer,  "Speed limit: %d", BLACKSPOT1_SPEED);
-                    } else if(i == 2) {
+                    } else if(i == 1) {
                         sprintf(speed_limit_message_buffer,  "Speed limit: %d", BLACKSPOT2_SPEED);
-                    } else {
+                    } else if(i == 2) {
                         sprintf(speed_limit_message_buffer,  "Speed limit: %d", BLACKSPOT3_SPEED);
+                    }else if(i == 3) {
+                        sprintf(speed_limit_message_buffer,  "Speed limit: %d", BLACKSPOT4_SPEED);
                     }
                     
                     updateLCDCustom("Device tampered",speed_limit_message_buffer, curr_speed_buffer,"");
@@ -362,10 +379,10 @@ void loop() {
                     // this is a violation 
                     sprintf(violation_time, "[%d:%d:%d]-[%d/%d/%d]", hr, mint, sec,day,month,year);
                     sprintf(vehicle_location, "[%.2f,%.2f]", latitude, longitude);
-                    sprintf(blackspot_location, "[%.2f,%.2f]", blackspot_list[0][0], blackspot_list[0][0]); // first blackspot in the list
+                    sprintf(blackspot_location, "[%.2f,%.2f]", blackspot_list[i][0], blackspot_list[i][0]); // first blackspot in the list
 
                     // compose lora packet 
-                    sprintf(loraMSG, "plate:%s, speed:%f, time:%s, vehicle_location:%s, blackspot_id:%s, blackspot-location:%s, station:%s",
+                    sprintf(loraMSG, "plate:%s, speed:%d, time:%s, vehicle_location:%s, blackspot_id:%s, blackspot-location:%s, station:%s",
                             number_plate,// vehicle number plate
                             vehicle_speed,// speed
                             violation_time,// time violated
@@ -381,6 +398,16 @@ void loop() {
                     // send GSM messages 
                     
                 }
+            } else {
+                // maintain
+                // display road clear
+                updateLCDCustom("Road clear.",
+                                "Safe journey!",
+                                "",
+                                "");
+
+                mtr_1.set_speed(NORMAL_SPEED);
+                mtr_1.move_forward();
             }
 
         // DEVICE HAS NOT BEEN TAMPERED WITH HERE

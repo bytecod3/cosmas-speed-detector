@@ -55,9 +55,9 @@
 
 // for different blackspot areas, different speed 
 #define BLACKSPOT1_SPEED    90 // A BLACKSPOT
-#define BLACKSPOT2_SPEED    120
+#define BLACKSPOT2_SPEED    100
 #define BLACKSPOT3_SPEED    200
-#define BLACKSPOT4_SPEED    150 // A BLACKSPOT
+#define BLACKSPOT4_SPEED    120 // A BLACKSPOT
 
 /*============================GSM VARIABLES=============================*/
 #define GSM_RX 16
